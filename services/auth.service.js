@@ -1,5 +1,5 @@
 const models = require('../database/models')
-const UsersService = require('../services/users.service');
+const UsersService = require('./users.service');
 
 const { comparePassword } = require('../libs/bcrypt');
 const jwt = require('jsonwebtoken');

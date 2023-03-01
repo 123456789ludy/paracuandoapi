@@ -1,6 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
+const router = require('./routes/auth.routes')
+const routerModels = require('./routes/models.router')
+const routerErrorHandler = require('./routes/errorhandler.router')
 require('dotenv').config()
 
 const app = express()
@@ -42,6 +45,8 @@ app.use(express.urlencoded({ extended: false }))
 /*
 Routes
 */
+routerModels(app)
+routerErrorHandler(app)
 
 /* 
     Tell everyone the state of your api
