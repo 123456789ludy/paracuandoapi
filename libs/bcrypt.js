@@ -13,7 +13,7 @@ const comparePassword = (plainPassword, hashedPassword) => {
     throw new CustomError('The user account is not well setted, contact admin', 409, 'Bad Behaviour')
   }
   let provePassword = bcrypt.compareSync(plainPassword, hashedPassword)
-  if (provePassword) return provePassword
+  if (provePassword) return true
   else throw new CustomError('Wrong Credentials', 401, 'Unauthorized')
 }
 

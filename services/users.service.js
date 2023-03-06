@@ -88,7 +88,11 @@ class UsersService {
 
   async findUserByEmailOr404(email) {
     if(!email) throw new CustomError('Email not given', 400, 'Bad Request')
-    let user = await models.Users.findOne({where: {email}}, { raw: true })
+    let user = await models.User.findOne({
+      where: {
+        email: email
+      }
+    }, { raw: true })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
