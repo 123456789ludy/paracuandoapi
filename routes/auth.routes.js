@@ -6,12 +6,13 @@ const passport = require('../libs/passport')
 const verifySchema = require('../schemas/joiSchema.checker')
 const { signupSchema,forgetPasswordSchema,restorePasswordSchema } = require('../schemas/auth.schemas')
 
-const { signUp, logIn,forgetPassword,restorePassword,userToken } = require('../controllers/auth.controller')
+const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('../controllers/auth.controller')
 
 
 router.post('/login', logIn) 
 
-router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp) 
+// router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp) 
+router.post('/sign-up', signUp)
 
 router.post('/forget-password', verifySchema(forgetPasswordSchema, 'body'), forgetPassword) 
 

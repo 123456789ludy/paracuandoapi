@@ -33,30 +33,39 @@ const logIn = async (request, response, next) => {
 
 const signUp = async (request, response, next) => {
   try {
-    let { body } = request;
-    let errors = []
-    let user = await usersService.createAuthUser(body);
-    try {
-      await sender.sendMail({
-        from: process.env.MAIL_SEND,
-        to: user.email,
-        subject: `Success SignUp! ${user.firstName} `,
-        html: `<h1>Welcome to: ${process.env.DOMAIN}`,
-        text: 'Welcome Again!',
-      })
-    } catch (error) {
-      errors.push({errorName:'Error Sending Email', message:'Something went wrong with the Sender Email'})
+    const { body } = request
+    const errors = []
+    
+    const userData = {
+      firstName: body.first_name,
+      lastName: body.last_name,
+      email: body.email,
+      password: body.password
     }
+    // let user = await usersService.createUser(body)
+    await usersService.createUser(userData)
+
+    // try {
+    //   await sender.sendMail({
+    //     from: process.env.MAIL_SEND,
+    //     to: user.email,
+    //     subject: `Success SignUp! ${user.firstName} `,
+    //     html: `<h1>Welcome to: ${process.env.DOMAIN}`,
+    //     text: 'Welcome Again!',
+    //   })
+    // } catch (error) {
+    //   errors.push({errorName:'Error Sending Email', message:'Something went wrong with the Sender Email'})
+    // }
     return response
       .status(201)
       .json({
         results: 'Success Sign Up',
         errors
-      });
+      })
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
 
 const forgetPassword = async (request, response, next) => {

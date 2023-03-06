@@ -53,9 +53,11 @@ class UsersService {
         raw: true 
       })
 
-      await models.Profile.create({ 
-        user_id: newUser.id, 
-        role_id: publicRole.id
+      await models.Profile.create({
+        id: uuid4(),
+        userId: newUser.id, 
+        roleId: publicRole.id,
+        countryId: 1
       }, {
         transaction
       })
@@ -63,6 +65,7 @@ class UsersService {
       await transaction.commit()
       return newUser
     } catch (error) {
+      console.error(error)
       await transaction.rollback()
       throw error
     }
