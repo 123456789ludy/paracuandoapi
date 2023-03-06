@@ -37,7 +37,7 @@ class UsersService {
     return users
   }
 
-  async createUser(obj) {
+  async createAuthUser(obj) {
     const transaction = await models.sequelize.transaction()
     try {
       obj.password = hashPassword(obj.password)
@@ -129,7 +129,7 @@ class UsersService {
   async setTokenUser(id, token) {
     const transaction = await models.sequelize.transaction()
     try {
-      let user = await models.Users.findByPk(id)
+      let user = await models.User.findByPk(id)
       if (!user) throw new CustomError('Not found user', 404, 'Not Found')
       let updatedUser = await user.update({ token }, { transaction })
       await transaction.commit()

@@ -43,19 +43,20 @@ const signUp = async (request, response, next) => {
       password: body.password
     }
     // let user = await usersService.createUser(body)
-    await usersService.createUser(userData)
+    let user = await usersService.createAuthUser(userData)
 
-    // try {
-    //   await sender.sendMail({
-    //     from: process.env.MAIL_SEND,
-    //     to: user.email,
-    //     subject: `Success SignUp! ${user.firstName} `,
-    //     html: `<h1>Welcome to: ${process.env.DOMAIN}`,
-    //     text: 'Welcome Again!',
-    //   })
-    // } catch (error) {
-    //   errors.push({errorName:'Error Sending Email', message:'Something went wrong with the Sender Email'})
-    // }
+    try {
+      await sender.sendMail({
+        from: process.env.MAIL_SEND,
+        to: user.email,
+        subject: `Success SignUp! ${user.firstName} `,
+        html: `<h1>Welcome to: ${process.env.DOMAIN}`,
+        text: 'Welcome Again!',
+      })
+    } catch (error) {
+      errors.push({errorName:'Error Sending Email', message:'Something went wrong with the Sender Email'})
+    }
+
     return response
       .status(201)
       .json({
