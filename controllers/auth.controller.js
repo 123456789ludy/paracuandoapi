@@ -42,7 +42,6 @@ const signUp = async (request, response, next) => {
       email: body.email,
       password: body.password
     }
-    // let user = await usersService.createUser(body)
     let user = await usersService.createAuthUser(userData)
 
     try {

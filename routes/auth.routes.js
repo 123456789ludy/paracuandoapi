@@ -10,10 +10,7 @@ const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('.
 
 
 router.post('/login', logIn) 
-
-// router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp) 
-router.post('/sign-up', signUp)
-
+router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp) 
 router.post('/forget-password', verifySchema(forgetPasswordSchema, 'body'), forgetPassword) 
 
 router.post('/change-password/:token', verifySchema(restorePasswordSchema, 'body'), restorePassword) 
