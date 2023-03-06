@@ -37,17 +37,28 @@ class UsersService {
     return users
   }
 
-  async createAuthUser(obj) {
+  async createUser(obj) {
     const transaction = await models.sequelize.transaction()
     try {
-
-      obj.id = uuid4()
       obj.password = hashPassword(obj.password)
-      let newUser = await models.Users.create(obj, { transaction, fields: ['id','first_name', 'last_name', 'password', 'email', 'username'] })
+      let newUser = await models.User.create(obj, { 
+        transaction
+      })
       
-      let publicRole = await models.Roles.findOne({where: {name:'public'}}, { raw: true })
+      let publicRole = await models.Role.findOne({
+        where: {
+          name:'public'
+        }
+      }, { 
+        raw: true 
+      })
 
-      let newUserProfile = await models.Profiles.create({ user_id: newUser.id, role_id: publicRole.id}, {transaction})
+      await models.Profile.create({ 
+        user_id: newUser.id, 
+        role_id: publicRole.id
+      }, {
+        transaction
+      })
 
       await transaction.commit()
       return newUser
@@ -58,9 +69,11 @@ class UsersService {
   }
   
   
-  async getAuthUserOr404(id) {
-    let user = await models.Users.scope('auth_flow').findByPk(id, { raw: true })
+  async getUserOr404(id) {
+    let user = await models.User.findByPk(id)
+
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
+    
     return user
   }
 

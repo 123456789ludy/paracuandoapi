@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, /*Sequelize*/) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.bulkInsert('roles', [
+      await queryInterface.bulkInsert('Roles', [
         {
           id: '1',
           name: 'public',
@@ -30,9 +30,9 @@ module.exports = {
   async down(queryInterface, /*Sequelize*/) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.bulkDelete('roles', {
+      await queryInterface.bulkDelete('Roles', {
         name: {
-          [Op.or]: ['admin', 'public',]
+          [Op.or]: ['admin', 'public']
         }
       }, { transaction })
       await transaction.commit()
