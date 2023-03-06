@@ -36,16 +36,15 @@ class AuthService {
   }
 
   async userToken(id) {
-    let user = await models.Users.scope('view_me').findOne(
-      {
-        where: {id},
-        include: [{
-          model: models.Profiles,
-          as: 'profiles'
-        }]
-      },   
-      { raw: true }
-    )
+    let user = await models.User.findOne({
+      where: { id },
+      include: [{
+        model: models.Profile,
+        as: 'profile'
+      }]
+    },   
+    { raw: true })
+
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }

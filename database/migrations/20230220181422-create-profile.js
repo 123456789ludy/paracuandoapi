@@ -13,8 +13,7 @@ module.exports = {
         onDelete: 'CASCADE',
         references: {
           model: 'Users',
-          key: 'id',
-          as: 'userId'
+          key: 'id'
         },
         field: 'user_id'
       },

@@ -24,7 +24,7 @@ router.get(
   '/me',
   passport.authenticate('jwt', { session: false }),
   userToken
-); 
+) 
 
 router.get(
   '/testing',
@@ -39,12 +39,12 @@ router.get(
           _sessionManager: request._sessionManager,
           authInfo: request.authInfo,
         },
-      });
+      })
     } catch (error) {
-      console.log(error);
-      next(error);
+      console.log(error)
+      next(error)
     }
   }
-); 
+) 
 
 module.exports = router
