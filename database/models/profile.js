@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       Profile.belongsTo(models.Role, {
-        foreignKey: 'profileId'
+        foreignKey: 'roleId'
       })
 
       Profile.hasMany(models.Vote, {
@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Profile.init({
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true
+    },
     userId: DataTypes.BIGINT,
     roleId: DataTypes.INTEGER,
     countryId: DataTypes.INTEGER,
@@ -43,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Profile',
+    tableName: 'Profiles'
   });
   return Profile;
 };

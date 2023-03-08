@@ -40,27 +40,43 @@ class UsersService {
   async createAuthUser(obj) {
     const transaction = await models.sequelize.transaction()
     try {
-
-      obj.id = uuid4()
       obj.password = hashPassword(obj.password)
-      let newUser = await models.Users.create(obj, { transaction, fields: ['id','first_name', 'last_name', 'password', 'email', 'username'] })
+      let newUser = await models.User.create(obj, { 
+        transaction
+      })
       
-      let publicRole = await models.Roles.findOne({where: {name:'public'}}, { raw: true })
+      let publicRole = await models.Role.findOne({
+        where: {
+          name:'public'
+        }
+      }, { 
+        raw: true 
+      })
 
-      let newUserProfile = await models.Profiles.create({ user_id: newUser.id, role_id: publicRole.id}, {transaction})
+      await models.Profile.create({
+        id: uuid4(),
+        userId: newUser.id, 
+        roleId: publicRole.id,
+        countryId: 1
+      }, {
+        transaction
+      })
 
       await transaction.commit()
       return newUser
     } catch (error) {
+      console.error(error)
       await transaction.rollback()
       throw error
     }
   }
   
   
-  async getAuthUserOr404(id) {
-    let user = await models.Users.scope('auth_flow').findByPk(id, { raw: true })
+  async getUserOr404(id) {
+    let user = await models.User.findByPk(id)
+
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
+    
     return user
   }
 
@@ -72,7 +88,11 @@ class UsersService {
 
   async findUserByEmailOr404(email) {
     if(!email) throw new CustomError('Email not given', 400, 'Bad Request')
-    let user = await models.Users.findOne({where: {email}}, { raw: true })
+    let user = await models.User.findOne({
+      where: {
+        email: email
+      }
+    }, { raw: true })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
@@ -109,7 +129,7 @@ class UsersService {
   async setTokenUser(id, token) {
     const transaction = await models.sequelize.transaction()
     try {
-      let user = await models.Users.findByPk(id)
+      let user = await models.User.findByPk(id)
       if (!user) throw new CustomError('Not found user', 404, 'Not Found')
       let updatedUser = await user.update({ token }, { transaction })
       await transaction.commit()

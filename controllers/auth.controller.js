@@ -33,9 +33,17 @@ const logIn = async (request, response, next) => {
 
 const signUp = async (request, response, next) => {
   try {
-    let { body } = request;
-    let errors = []
-    let user = await usersService.createAuthUser(body);
+    const { body } = request
+    const errors = []
+    
+    const userData = {
+      firstName: body.first_name,
+      lastName: body.last_name,
+      email: body.email,
+      password: body.password
+    }
+    let user = await usersService.createAuthUser(userData)
+
     try {
       await sender.sendMail({
         from: process.env.MAIL_SEND,
@@ -47,16 +55,17 @@ const signUp = async (request, response, next) => {
     } catch (error) {
       errors.push({errorName:'Error Sending Email', message:'Something went wrong with the Sender Email'})
     }
+
     return response
       .status(201)
       .json({
         results: 'Success Sign Up',
         errors
-      });
+      })
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
 
 const forgetPassword = async (request, response, next) => {

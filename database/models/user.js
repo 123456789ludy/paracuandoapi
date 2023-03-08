@@ -12,14 +12,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasOne(models.Profile, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
+        as: 'profile'
       })
     }
   }
   User.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     userName: DataTypes.STRING,
     password: DataTypes.STRING,
     emailVerified: DataTypes.BOOLEAN,
@@ -27,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    tableName: 'Users'
   });
   return User;
 };

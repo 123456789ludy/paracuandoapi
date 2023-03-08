@@ -15,7 +15,7 @@ const options = {
 
 passport.use(
   new JwtStrategy(options, (tokenDecoded, done) => {
-    usersService.getAuthUserOr404(tokenDecoded.id)
+    usersService.getUserOr404(tokenDecoded.id)
       .then((user) => {
         if (user) {
           return done(null, tokenDecoded)
